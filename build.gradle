@@ -14,7 +14,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
-group 'com.test'
+group 'com.test.book'
 version '1.0-SNAPSHOT'
 sourceCompatibility = '11'
 

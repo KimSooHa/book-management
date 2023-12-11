@@ -5,14 +5,15 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "title", "author", "isbn", "publicDate", "borrowed", "borrowerId", "borrowedDate"})
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "borrowedDate", "returnedDate"})
 public class Loan {
 
     @Id
@@ -21,32 +22,13 @@ public class Loan {
     private Long id;
 
     @NotNull
-    @Column(length = 20)
-    private String title;
+    private LocalDateTime borrowedDate;
 
-    @Column(length = 200)
-    private String author;
-
-    @Column(length = 13)
-    @NotNull
-    private String isbn; // 도서번호
-
-    @NotNull
-    private LocalDate publicDate;
-
-    @NotNull
-    private boolean borrowed;
-
-    private Long borrowerId;
-
-    private LocalDate borrowedDate;
+    private LocalDateTime returnedDate;
 
 
-    public Loan(String title, String author, String isbn) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.borrowed = false;
+    public Loan() {
+        this.borrowedDate = LocalDateTime.now();
     }
 
     @NotNull

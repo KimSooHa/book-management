@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class Book {
     private Long id;
 
     @NotNull
-    @Column(length = 20)
+    @Column(length = 200)
     private String title;
 
     @Column(length = 200)
@@ -45,14 +44,26 @@ public class Book {
     private LocalDate borrowedDate;
 
 
-    public Book(String title, String author, String isbn, boolean borrowed) {
+    public Book(String title, String author, String isbn, LocalDate publicDate) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.publicDate = publicDate;
         this.borrowed = false;
     }
 
     @OneToMany(mappedBy = "book", cascade = REMOVE)
     private List<Loan> loans = new ArrayList<>();
 
+    public static void borrowBook(Book book, Long userId) {
+        book.setBorrowed(true);
+        book.setBorrowerId(userId);
+        book.setBorrowedDate(LocalDate.now());
+    }
+
+    public static void returnBook(Book book) {
+        book.setBorrowed(false);
+        book.setBorrowerId(null);
+        book.setBorrowedDate(null);
+    }
 }
