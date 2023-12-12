@@ -1,0 +1,18 @@
+---
+spring:
+  config:
+    activate:
+      on-profile: real
+
+  datasource:
+    url: jdbc:mariadb://52.79.220.234:3306/book_management
+    username: ${db_username}
+    password: ${db_passwd}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8083
+
+---
