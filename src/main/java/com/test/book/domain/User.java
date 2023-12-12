@@ -31,7 +31,7 @@ public class User {
     private String loginId;
 
     @NotNull
-    @Column(length = 256)
+    @Column(length = 16)
     private String pwd;
 
     @NotNull

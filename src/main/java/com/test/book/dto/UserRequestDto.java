@@ -31,11 +31,4 @@ public class UserRequestDto {
     @Email(message = "이메일 형식에 맞지 않습니다.")
     @Size(max = 320, message = "이메일은 최대 320자 이하여야 합니다.")
     private String email;
-
-//    @QueryProjection
-//    public UserRequestDto(String name, String pwd, String email) {
-//        this.name = name;
-//        this.pwd = pwd;
-//        this.email = email;
-//    }
 }
