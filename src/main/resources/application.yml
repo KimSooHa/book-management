@@ -15,12 +15,27 @@ spring:
         format_sql: true
         use_sql_comments: true
 
+  # Spring Boot RabbitMQ 설정
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600 # 데이터 유지 시간(sec)
+      cache-null-values: true # null 캐싱 여부
+      host: localhost
+      port: 6379
+
+
 
 logging:
   level:
     org.hibernate.SQL: debug
 #    org.hibernate.type: trace #띄어쓰기 2칸
-
 
 ---
 spring:
