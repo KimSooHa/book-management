@@ -9,6 +9,11 @@ spring:
       pageable:
         default-page-size: 20 # 기본 페이지 사이즈
 
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 6
+
   jpa:
     properties:
       hibernate:
@@ -20,17 +25,11 @@ spring:
     host: localhost
     port: 5672
     username: admin
+
     password: admin
 
-  cache:
-    type: redis
-    redis:
-      time-to-live: 3600 # 데이터 유지 시간(sec)
-      cache-null-values: true # null 캐싱 여부
-      host: localhost
-      port: 6379
-
-
+jwt:
+  secret: testtesttesttesttesttesttesttest
 
 logging:
   level:

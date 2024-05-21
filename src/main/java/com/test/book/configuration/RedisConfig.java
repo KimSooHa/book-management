@@ -1,5 +1,9 @@
 package com.test.book.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,4 +52,16 @@ public class RedisConfig {
             redisTemplate.setValueSerializer(new StringRedisSerializer());
             return redisTemplate;
         }
+
+    /**
+     * ObjectMapper에서 LocalDateTime 관련 에러가 나지 않게 설정해준 뒤 빈으로 등록해서 사용
+     */
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+        objectMapper.registerModules(new JavaTimeModule(), new Jdk8Module());
+        return objectMapper;
+    }
 }
