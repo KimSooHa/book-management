@@ -27,10 +27,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableRedisRepositories // Redis Repository 활성화
 public class RedisConfig {
 
-        @Value("${spring.cache.redis.host}")
+        @Value("${spring.data.redis.host}")
         private String host;
 
-        @Value("${spring.cache.redis.port}")
+        @Value("${spring.data.redis.port}")
         private int port;
 
         /**
@@ -46,7 +46,10 @@ public class RedisConfig {
          */
         @Bean
         public RedisTemplate<?,?> redisTemplate(){
+            // redisTemplate를 받아와서 set, get, delete를 사용
             RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+            // setKeySerializer, setValueSerializer 설정
+            // redis-cli을 통해 직접 데이터를 조회 시 알아볼 수 없는 형태로 출력되는 것을 방지
             redisTemplate.setConnectionFactory(redisConnectionFactory());
             redisTemplate.setKeySerializer(new StringRedisSerializer());
             redisTemplate.setValueSerializer(new StringRedisSerializer());

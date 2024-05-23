@@ -1,6 +1,8 @@
 package com.test.book.component;
 
 import com.test.book.domain.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,18 +13,16 @@ import java.util.Collections;
 /**
  * 사용자 인증정보 제공 객체
  */
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> collect = new ArrayList<>();
-//        collect.add(new SimpleGrantedAuthority("테스트"));
+//        Collection<GrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority("테스트"));
 //        return collect;
         // 특별한 권한 시스템을 사용하지 않을 경우
         // return Collections.EMPTY_LIST;

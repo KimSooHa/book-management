@@ -1,11 +1,7 @@
-package com.test.book.redis.utils;
+package com.test.book.redis;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
 
 @Service
 public class RedisTokenUtils {
@@ -38,6 +34,24 @@ public class RedisTokenUtils {
 
     // 레디스 : userIdx로 엑세스 토큰 가져오기
     public String getAccessToken(Integer userIdx) {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        String key = REFRESH_TOKEN_KEY + userIdx;
+        return redisUtils.getData(key);
+    }
 
+    // 레디스 : userIdx로 리프래쉬 토큰 가져오기
+    public String getRefreshToken(Integer userIdx) {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        String key = REFRESH_TOKEN_KEY + userIdx;
+        return redisUtils.getData(key);
+    }
+
+    // 레디스 : userIdx로 토큰 삭제
+    public void deleteToken(Integer userIdx) {
+        RedisUtils redisUtils = new RedisUtils(stringRedisTemplate);
+        String AKey = ACCESS_TOKEN_KEY + userIdx;
+        String RKey = REFRESH_TOKEN_KEY + userIdx;
+        redisUtils.deleteData(AKey);
+        redisUtils.deleteData(RKey);
     }
 }

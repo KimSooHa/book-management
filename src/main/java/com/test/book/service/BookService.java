@@ -45,6 +45,8 @@ public class BookService {
     private void validateDuplicateBook(String isbn) {
         Optional<Book> findBook = bookRepository.findByIsbn(isbn);
 
+        findBook.orElseThrow(() -> new FindBookException("A"));
+
         findBook.ifPresent((b) -> {
             throw new IllegalStateException("이미 존재하는 도서입니다.");
         });

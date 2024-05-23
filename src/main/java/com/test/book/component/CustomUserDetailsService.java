@@ -2,6 +2,7 @@ package com.test.book.component;
 
 import com.test.book.domain.User;
 import com.test.book.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * UserDetails 를 토대로 사용자의 인증정보를 SecurityContextHolder 에 제공
  */
+@Slf4j
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -28,9 +30,11 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+        log.info("loadUserByUsername in !!");
         // username으로 Repository에서 User를 찾는 method
         User user = userRepository.findByLoginId(loginId)
                     .orElseThrow(() -> new UsernameNotFoundException("계정을 찾을 수 없습니다."));
+
         return new CustomUserDetails(user); // 가져온 유저 정보를 UserDetails 에 넣어서 세팅해주기
     }
 }
