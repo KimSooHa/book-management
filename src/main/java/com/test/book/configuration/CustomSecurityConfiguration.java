@@ -5,6 +5,7 @@ import com.test.book.component.JwtTokenProvider;
 import com.test.book.filter.CustomJWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 활성화
 @RequiredArgsConstructor
 public class CustomSecurityConfiguration {
 
@@ -31,19 +33,17 @@ public class CustomSecurityConfiguration {
         http
             // 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
                 .csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
+                .httpBasic().disable() // Basic 기반(username, password) 로그인 사용 안함
+                .formLogin().disable() // form 기반 로그인 사용 안함
+                // Session 기반의 인증기반을 사용하지 않고 추후 JWT를 이용하여서 인증 예정
+                // No session will be created of used by spring security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/users/login", "/api/users/logout", "/api/users/signup").permitAll()
-                .anyRequest().authenticated() //Authentication 필요한 주소
 
                 .and()
                 .addFilterBefore(new CustomJWTAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                // Session 기반의 인증기반을 사용하지 않고 추후 JWT를 이용하여서 인증 예정
-                // No session will be created of used by spring security
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests()
+                .antMatchers("/api/users/login", "/api/users/logout", "/api/users/signup").permitAll()
+                .anyRequest().authenticated(); //Authentication 필요한 주소
         // 최종 구성한 값을 사용함.
         return http.build();
     }
