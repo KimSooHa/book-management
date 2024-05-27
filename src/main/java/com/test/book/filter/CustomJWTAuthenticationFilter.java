@@ -5,12 +5,9 @@ import com.test.book.component.JwtTokenProvider;
 import io.jsonwebtoken.IncorrectClaimException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,7 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.google.common.net.HttpHeaders.*;
+import static com.google.common.net.HttpHeaders.AUTHORIZATION;
+import static com.test.book.component.JwtProperties.BEARER_PREFIX;
 
 /**
  * request 앞단에 붙이는 filter. http request 에서 토큰을 받아와 정상 토큰일 경우 security context 에 저장
@@ -79,7 +77,7 @@ public class CustomJWTAuthenticationFilter extends OncePerRequestFilter {
     // HTTP Request 헤더로부터 토큰 추출
     private String getToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_BEARER)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
         return null;

@@ -34,6 +34,9 @@ public class UserService {
 
     /**
      * 회원 가입
+     *
+     * @param userDto
+     * @return
      */
     @Transactional  // 변경해야 하기 때문에 읽기, 쓰기가 가능해야 함
     public Long join(UserRequestDto userDto) {
@@ -43,8 +46,10 @@ public class UserService {
         return user.getId();
     }
 
-    /*
-        중복되는 사용자 체크
+    /**
+     * 중복되는 사용자 체크
+     *
+     * @param user
      */
     private void validateDuplicateUser(User user) {
         Optional<User> findMember = userRepository.findByLoginId(user.getLoginId());   // 로그인 아이디로 회원 찾기
@@ -88,6 +93,7 @@ public class UserService {
 
     /**
      * Redis에서 RT가 있다면 DELETE, Token create & Redis에 RT 저장
+     *
      * @param loginId
      * @param authorities
      * @return
@@ -104,6 +110,7 @@ public class UserService {
 
     /**
      * redis에 refreshToken 저장
+     *
      * @param principal
      * @param refreshToken
      */
@@ -114,6 +121,7 @@ public class UserService {
 
     /**
      * 권한 이름 가져오기
+     *
      * @param authentication
      * @return
      */
@@ -125,6 +133,7 @@ public class UserService {
 
     /**
      * logout
+     *
      * @param accessToken
      */
     public void logout(String accessToken) {
@@ -135,5 +144,38 @@ public class UserService {
         if (redisUtils.getData(JwtProperties.RT + principal) != null) {
             redisUtils.deleteData(JwtProperties.RT + principal);
         }
+    }
+
+    /**
+     * token 재발급
+     *
+     * @param accessToken
+     * @param refreshToken
+     * @return
+     */
+    public TokenDTO reissue(String accessToken, String refreshToken) {
+        accessToken = JwtUtils.getToken(accessToken);
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        String principal = authentication.getName();
+
+        String refreshTokenInRedis = redisUtils.getData(JwtProperties.RT + principal);
+        if (refreshTokenInRedis == null) {
+            // Redis에 RT가 없는 경우 -> 재로그인 요청
+            return null;
+        }
+
+        // RT의 유효성 검사 & Redis에 저장된 RT와 같은지 비교
+        // 같지 않다면 삭제, 재로그인 요청
+        if (!jwtTokenProvider.validationToken(refreshTokenInRedis)
+                || !refreshTokenInRedis.equals(refreshToken)) {
+            redisUtils.deleteData(JwtProperties.RT + principal);
+            return null;
+        }
+
+        // 토큰 재발급 및 Redis 업데이트
+        redisUtils.deleteData(JwtProperties.RT + principal);
+        TokenDTO tokenDTO = jwtTokenProvider.createToken(principal, getAuthorities(authentication));
+        saveRefreshToken(principal, tokenDTO.getRefreshToken());
+        return tokenDTO;
     }
 }
