@@ -5,13 +5,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /************
@@ -22,8 +23,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  ************/
 @Getter
 @Configuration
-//@RequiredArgsConstructor
-//@EnableRedisRepositories // Redis Repository 활성화
+@RequiredArgsConstructor
+@EnableRedisRepositories // Redis Repository 활성화
 public class RedisConfig {
 
         @Value("${spring.data.redis.host}")
@@ -40,22 +41,13 @@ public class RedisConfig {
             return new LettuceConnectionFactory(host, port);
         }
 
-        @Bean
-        public RedisTemplate<String, Object> redisTemplate() {
-            RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-            redisTemplate.setConnectionFactory(redisConnectionFactory());
-            redisTemplate.setKeySerializer(new StringRedisSerializer());
-            redisTemplate.setValueSerializer(new StringRedisSerializer());
-            return redisTemplate;
-        }
-
         /**
          * RedisConnection에서 넘겨준 byte 값 객체 직렬화
          */
         @Bean
-        public StringRedisTemplate stringRedisTemplate(){
+        public RedisTemplate<?,?> redisTemplate(){
             // redisTemplate를 받아와서 set, get, delete를 사용
-            StringRedisTemplate redisTemplate = new StringRedisTemplate();
+            RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
             // setKeySerializer, setValueSerializer 설정
             // redis-cli을 통해 직접 데이터를 조회 시 알아볼 수 없는 형태로 출력되는 것을 방지
             redisTemplate.setConnectionFactory(redisConnectionFactory());
