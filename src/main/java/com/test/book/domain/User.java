@@ -1,8 +1,6 @@
 package com.test.book.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +10,6 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.REMOVE;
 
-@RedisHash("user")
 @Entity
 @Getter
 @Setter
