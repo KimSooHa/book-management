@@ -58,4 +58,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/book-app:latest
             docker stop app || true
             docker rm app || true
-            docker run -d --name app -p 8082:8082 ${{ secrets.DOCKER_USERNAME }}/book-app:latest
+            docker run -d --name app -p 8083:8083 ${{ secrets.DOCKER_USERNAME }}/book-app:latest
