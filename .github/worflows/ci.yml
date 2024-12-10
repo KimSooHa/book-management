@@ -36,8 +36,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2  # 5. GitHub Actions에서 DockerHub에 로그인
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # DockerHub 사용자명
-          password: ${{ secrets.DOCKER_PASSWORD }}  # DockerHub 비밀번호
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # DockerHub 사용자명
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}  # DockerHub 비밀번호
 
       - name: Build and Push Docker Image
         # 6. Docker 이미지 빌드 및 푸시
@@ -45,7 +45,7 @@ jobs:
         with:
           context: .
           push: true # 이미지를 빌드한 뒤 DockerHub에 자동으로 업로드
-          tags: ${{ secrets.DOCKER_USERNAME }}/book-app:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
 
       # 7. SSH를 통해 AWS EC2에 배포
       - name: Deploy to AWS EC2
@@ -55,7 +55,7 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/book-app:latest
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
             docker stop app || true
             docker rm app || true
-            docker run -d --name app -p 8083:8083 ${{ secrets.DOCKER_USERNAME }}/book-app:latest
+            docker run -d --name app -p 8083:8083 ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
