@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master  # master 브랜치에 푸시될 때 실행
-    pull_request:
-      branches:
-        - master # master 브랜치에 pull Request가 열릴 때 실행
+  pull_request:
+    branches:
+      - master # master 브랜치에 pull Request가 열릴 때 실행
 
 jobs:
   build:
