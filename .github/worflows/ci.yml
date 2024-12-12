@@ -25,7 +25,9 @@ jobs:
       - name: Cache Gradle dependencies
         uses: actions/cache@v3 # 3. Gradle 캐시 설정(Gradle 의존성을 캐싱하여 빌드시간 단축)
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -40,10 +42,9 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}  # DockerHub 비밀번호
 
       - name: Build and Push Docker Image
-        # 6. Docker 이미지 빌드 및 푸시
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v4 # 6. Docker 이미지 빌드 및 푸시
         with:
-          context: .
+          context: . # Dockerfile이 있는 경로
           push: true # 이미지를 빌드한 뒤 DockerHub에 자동으로 업로드
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
 
@@ -58,4 +59,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
             docker stop app || true
             docker rm app || true
-            docker run -d --name app -p 8083:8083 ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
+            docker run -d --name app -p 8083:8083 --restart always ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
