@@ -57,12 +57,17 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
             # MariaDB 접속 정보 환경변수 설정            
+            export DB_HOST=mariadb  # Docker Compose에서 MariaDB 서비스 이름
+            export DB_USER=${{ secrets.DB_USER }}  # DB 사용자
+            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}  # DB 비밀번호
+            export DB_NAME=${{ secrets.DB_NAME }}  # DB 이름
+
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
-            docker stop book-app || true
-            docker rm book-app || true
+            docker ps -a | grep book-app && docker stop book-app || true
+            docker ps -a | grep book-app && docker rm book-app || true
             docker run -d --name book-app -p 8083:8083 --restart always \
-              -e DB_HOST=mariadb \ # Docker Compose에서 MariaDB 서비스 이름
-              -e DB_USER=${{ secrets.DB_USER }} \
-              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e DB_NAME=${{ secrets.DB_NAME }} \
+              -e DB_HOST=$DB_HOST \ 
+              -e DB_USER=$DB_USER \
+              -e DB_PASSWORD=$DB_PASSWORD \
+              -e DB_NAME=$DB_NAME \
               ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
