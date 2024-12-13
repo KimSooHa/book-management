@@ -68,8 +68,8 @@ jobs:
             docker ps -a | grep book-app && docker rm book-app || true
             docker run -d --name book-app --network docker-mysql_mynetwork -p 8083:8083 --restart always \
               -e DB_HOST=$DB_HOST \
-              -e DB_USER=$DB_USER \
-              -e DB_PASSWORD=$DB_PASSWORD \
+              -e DB_USERNAME=$DB_USER \
+              -e DB_PASSWD=$DB_PASSWORD \
               -e DB_NAME=$DB_NAME \
               -e SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE \
               ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
