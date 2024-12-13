@@ -61,6 +61,7 @@ jobs:
             export DB_USER=${{ secrets.DB_USER }}  # DB 사용자
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}  # DB 비밀번호
             export DB_NAME=${{ secrets.DB_NAME }}  # DB 이름
+            export SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }}
       
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
             docker ps -a | grep book-app && docker stop book-app || true
@@ -70,4 +71,5 @@ jobs:
               -e DB_USER=$DB_USER \
               -e DB_PASSWORD=$DB_PASSWORD \
               -e DB_NAME=$DB_NAME \
+              -e SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE \
               ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
