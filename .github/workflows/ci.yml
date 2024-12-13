@@ -61,12 +61,12 @@ jobs:
             export DB_USER=${{ secrets.DB_USER }}  # DB 사용자
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}  # DB 비밀번호
             export DB_NAME=${{ secrets.DB_NAME }}  # DB 이름
-
+      
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/book-app:latest
             docker ps -a | grep book-app && docker stop book-app || true
             docker ps -a | grep book-app && docker rm book-app || true
             docker run -d --name book-app -p 8083:8083 --restart always \
-              -e DB_HOST=$DB_HOST \ 
+              -e DB_HOST=$DB_HOST \
               -e DB_USER=$DB_USER \
               -e DB_PASSWORD=$DB_PASSWORD \
               -e DB_NAME=$DB_NAME \
