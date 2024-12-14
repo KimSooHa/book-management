@@ -15,4 +15,7 @@ spring:
 server:
   port: 8083
 
+logging:
+  level:
+    org.apache.coyote.http11: DEBUG # Tomcat HTTP 처리기의 디버깅 로그 활성화
 ---
