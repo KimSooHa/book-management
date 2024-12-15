@@ -4,10 +4,7 @@ import com.test.book.component.CustomUserDetailsService;
 import com.test.book.component.JwtTokenProvider;
 import com.test.book.filter.CustomJWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -16,9 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * 스프링 시큐리티 관련해서 환경 설정을 진행하는 클래스
  */
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 활성화
+//@Configuration
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 활성화
 @RequiredArgsConstructor
 public class CustomSecurityConfiguration {
 
