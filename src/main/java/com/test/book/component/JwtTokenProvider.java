@@ -6,11 +6,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -32,7 +27,7 @@ public class JwtTokenProvider {
 //    BCryptPasswordEncoder passwordEncoder;
 //    private final RedisTokenUtils redisTokenUtils;
 
-    private final UserDetailsService userDetailsService;
+//    private final UserDetailsService userDetailsService;
 
 
     /**
@@ -207,12 +202,12 @@ public class JwtTokenProvider {
      * @param token
      * @return
      */
-    public Authentication getAuthentication(String token) {
-        // 비밀값으로 토큰을 복호화한 뒤 클레임에 있는 사용자 이메일인 token subject를 가져온다
-        Claims claims = getClaims(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
-        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
-    }
+//    public Authentication getAuthentication(String token) {
+//        // 비밀값으로 토큰을 복호화한 뒤 클레임에 있는 사용자 이메일인 token subject를 가져온다
+//        Claims claims = getClaims(token);
+//        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+//        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+//    }
 
     /**
      * Claim 을 가져옴

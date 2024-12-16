@@ -1,13 +1,7 @@
 package com.test.book.configuration;
 
-import com.test.book.component.CustomUserDetailsService;
 import com.test.book.component.JwtTokenProvider;
-import com.test.book.filter.CustomJWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 /**
@@ -21,29 +15,29 @@ public class CustomSecurityConfiguration {
 
 //    private final StringRedisTemplate stringRedisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService customUserDetailsService;
+//    private final CustomUserDetailsService customUserDetailsService;
 //    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 //    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            // 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
-                .csrf().disable()
-                .httpBasic().disable() // Basic 기반(username, password) 로그인 사용 안함
-                .formLogin().disable() // form 기반 로그인 사용 안함
-                // Session 기반의 인증기반을 사용하지 않고 추후 JWT를 이용하여서 인증 예정
-                // No session will be created of used by spring security
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
-                .addFilterBefore(new CustomJWTAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/api/users/login", "/api/users/logout", "/api/users/signup").permitAll()
-                .anyRequest().authenticated(); //Authentication 필요한 주소
-        // 최종 구성한 값을 사용함.
-        return http.build();
-    }
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//            // 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
+//                .csrf().disable()
+//                .httpBasic().disable() // Basic 기반(username, password) 로그인 사용 안함
+//                .formLogin().disable() // form 기반 로그인 사용 안함
+//                // Session 기반의 인증기반을 사용하지 않고 추후 JWT를 이용하여서 인증 예정
+//                // No session will be created of used by spring security
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//
+//                .and()
+//                .addFilterBefore(new CustomJWTAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+//                .authorizeRequests()
+//                .antMatchers("/api/users/login", "/api/users/logout", "/api/users/signup").permitAll()
+//                .anyRequest().authenticated(); //Authentication 필요한 주소
+//        // 최종 구성한 값을 사용함.
+//        return http.build();
+//    }
 
 //    @Bean
 //    public CustomUsernamePasswordAuthenticationFilter authFilter() {
