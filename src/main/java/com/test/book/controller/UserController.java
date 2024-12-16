@@ -59,22 +59,22 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
-        log.info("login controller in!! {}", loginDTO);
-        TokenDTO tokenDTO = userService.login(loginDTO);
-
-        ResponseCookie httpCookie = ResponseCookie.from("refresh-token", tokenDTO.getRefreshToken())
-                .maxAge(JwtProperties.COOKIE_TTL)
-                .httpOnly(true) // client에서 script로 cookie 접근 제한
-                // .secure(true) // http가 아니면 쿠키 전송 안함
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                .header(HttpHeaders.AUTHORIZATION,
-                        JwtProperties.BEARER_PREFIX + tokenDTO.getAccessToken())
-                .build();
-    }
+//    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
+//        log.info("login controller in!! {}", loginDTO);
+//        TokenDTO tokenDTO = userService.login(loginDTO);
+//
+//        ResponseCookie httpCookie = ResponseCookie.from("refresh-token", tokenDTO.getRefreshToken())
+//                .maxAge(JwtProperties.COOKIE_TTL)
+//                .httpOnly(true) // client에서 script로 cookie 접근 제한
+//                // .secure(true) // http가 아니면 쿠키 전송 안함
+//                .build();
+//
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
+//                .header(HttpHeaders.AUTHORIZATION,
+//                        JwtProperties.BEARER_PREFIX + tokenDTO.getAccessToken())
+//                .build();
+//    }
 
 
     /**
@@ -102,36 +102,36 @@ public class UserController {
      * @param refreshToken
      * @return
      */
-    @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION) String accessToken,
-            @CookieValue("refresh-token") String refreshToken
-    ) {
-        TokenDTO tokenDTO = userService.reissue(accessToken, refreshToken);
-
-        if (tokenDTO != null) { // 토큰 재발급 성공
-            HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDTO.getRefreshToken())
-                    .maxAge(JwtProperties.COOKIE_TTL)
-                    .httpOnly(true) // client에서 script로 cookie 접근 제한
-                    // .secure(true) // http가 아니면 쿠키 전송 안함
-                    .build();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                    .header(HttpHeaders.AUTHORIZATION,
-                            JwtProperties.BEARER_PREFIX + tokenDTO.getAccessToken())
-                    .build();
-        } else {
-            HttpCookie httpCookie = ResponseCookie.from("refresh-token", "")
-                    .maxAge(0)
-                    .path("/") // 모든 경로에 cookie를 사용하게 함
-                    .build();
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                    .build();
-        }
-    }
+//    @PostMapping("/reissue")
+//    public ResponseEntity<?> reissue(
+//            @RequestHeader(value = HttpHeaders.AUTHORIZATION) String accessToken,
+//            @CookieValue("refresh-token") String refreshToken
+//    ) {
+//        TokenDTO tokenDTO = userService.reissue(accessToken, refreshToken);
+//
+//        if (tokenDTO != null) { // 토큰 재발급 성공
+//            HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDTO.getRefreshToken())
+//                    .maxAge(JwtProperties.COOKIE_TTL)
+//                    .httpOnly(true) // client에서 script로 cookie 접근 제한
+//                    // .secure(true) // http가 아니면 쿠키 전송 안함
+//                    .build();
+//
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
+//                    .header(HttpHeaders.AUTHORIZATION,
+//                            JwtProperties.BEARER_PREFIX + tokenDTO.getAccessToken())
+//                    .build();
+//        } else {
+//            HttpCookie httpCookie = ResponseCookie.from("refresh-token", "")
+//                    .maxAge(0)
+//                    .path("/") // 모든 경로에 cookie를 사용하게 함
+//                    .build();
+//
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
+//                    .build();
+//        }
+//    }
 
     /**
      * Cookie에 담긴 RT 삭제
@@ -139,17 +139,17 @@ public class UserController {
      * @param accessToken
      * @return
      */
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String accessToken) {
-        userService.logout(accessToken);
-
-        HttpCookie httpCookie = ResponseCookie.from("refresh-token", "")
-                .maxAge(0)
-                .path("/") // 모든 경로에 cookie를 사용하게 함
-                .build();
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                .build();
-    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String accessToken) {
+//        userService.logout(accessToken);
+//
+//        HttpCookie httpCookie = ResponseCookie.from("refresh-token", "")
+//                .maxAge(0)
+//                .path("/") // 모든 경로에 cookie를 사용하게 함
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
+//                .build();
+//    }
 }
